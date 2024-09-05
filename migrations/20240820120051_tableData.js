@@ -15,6 +15,13 @@ exports.up = function (knex) {
       table.string("position", 50);
       table.string("image");
     })
+    .createTable("tb_user", (table) => {
+      table.string("id", 20).primary();
+      table.string("username", 50);
+      table.string("password");
+      table.timestamp("last_login").defaultTo(knex.fn.now(6));
+      table.string("emp_id");
+    })
 };
 
 /**

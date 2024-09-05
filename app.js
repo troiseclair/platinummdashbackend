@@ -14,7 +14,7 @@ var app = express();
 
 /* setup cors */
 app.use(cors());
-let whiteList = ["http://52.221.24.81:3000", "https://httpbin.org/post"];
+let whiteList = ["http://localhost:3000", "https://httpbin.org/post"];
 let corsOption = {
   origin: function (origin, callback) {
     if (whiteList.indexOf(origin) != 1) {
@@ -59,8 +59,9 @@ app.use(passport.initialize());
 // app.use(express.static(path.join(__dirname, 'public')));
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
+// app.use("/users", usersRouter);
 app.use("/user", usersRouter);
+app.use("/users", usersRouter);
 app.use("/upload", upload.single("file"), cors(corsOption), uploadRouter);
 
 module.exports = app;
