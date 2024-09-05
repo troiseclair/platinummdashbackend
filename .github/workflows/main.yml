@@ -1,0 +1,34 @@
+# repo/.github/workflows/main.yml
+name: CI/CD
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v2
+      - name: deploy to server
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{secrets.SSH_KEY}}
+          REMOTE_HOST: ${{secrets.IP_ADDRESS}}
+          REMOTE_USER: ${{secrets.USERNAME}}
+          # TARGET: ~/24001135-46-mah-petitemart_be-platinum
+      - name: reload app
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.IP_ADDRESS}}
+          username: ${{secrets.USERNAME}}
+          key: ${{secrets.SSH_KEY}}
+          script: |
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            # cd ~/24001135-46-mah-petitemart_be-platinum
+            npm install --omit=dev
+            pm2 stop all
+            pm2 start ./bin/www 
+            pm2 restart all
