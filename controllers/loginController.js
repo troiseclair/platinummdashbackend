@@ -10,13 +10,13 @@ const postLogin = async (req, res) => {
   const { username, password } = req.body;
   /* get user data from table user */
   const getUser = await db("tb_user")
-    .join("tb_employee", "tb_user.emp_id", "=", "tb_employee.id")
+    .join("tb_users", "tb_user.emp_id", "=", "tb_users.id")
     .select(
       "tb_user.id",
       "tb_user.username",
       "tb_user.password",
-      "tb_employee.name",
-      "tb_employee.position",
+      "tb_users.name",
+      "tb_users.position",
       "tb_user.last_login"
     )
     .where({ "tb_user.username": username })
@@ -82,12 +82,12 @@ const getDashboard = async (req, res) => {
   const fullname = req.user.name;
   const firstName = fullname.split(" ").at(0);
   const user = await db("tb_user")
-    .join("tb_employee", "tb_user.emp_id", "=", "tb_employee.id")
+    .join("tb_users", "tb_user.emp_id", "=", "tb_users.id")
     .select(
       "tb_user.id",
       "tb_user.username",
-      "tb_employee.name",
-      "tb_employee.position",
+      "tb_users.name",
+      "tb_users.position",
       "tb_user.last_login"
     )
     .where({ "tb_user.id": userId })
